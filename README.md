@@ -124,14 +124,71 @@ The docker directory contains Docker-related configuration files and Kubernetes 
 
 ## Environment Variables
 
-### Frontend
+### Frontend Configuration
 
-- `NEXT_PUBLIC_API_URL`: Backend service URL (default: http://backend-service:3001)
+#### Required Variables
 
-### Backend
+- `NEXT_PUBLIC_API_URL`: Backend API URL (default: http://localhost:3001/api)
+- `NEXT_PUBLIC_APP_NAME`: Application name (default: "User Management System")
+- `NEXT_PUBLIC_APP_ENV`: Application environment (development/production)
 
-- `NODE_ENV`: Environment (development/production)
+#### Optional Variables
+
+- `NEXT_PUBLIC_ENABLE_ANALYTICS`: Enable analytics tracking (default: false)
+- `NEXT_PUBLIC_ENABLE_ERROR_REPORTING`: Enable error reporting (default: false)
+- `NEXT_PUBLIC_AUTH_ENABLED`: Enable authentication (default: false)
+- `NEXT_PUBLIC_AUTH0_DOMAIN`: Auth0 domain (required if auth enabled)
+- `NEXT_PUBLIC_AUTH0_CLIENT_ID`: Auth0 client ID (required if auth enabled)
+
+### Backend Configuration
+
+#### Required Variables
+
 - `PORT`: Server port (default: 3001)
+- `NODE_ENV`: Environment (development/production)
+- `MONGODB_URI`: MongoDB Atlas connection string (format: mongodb+srv://<username>:<password>@<cluster>.mongodb.net/?retryWrites=true&w=majority&appName=<appName>)
+
+#### Optional Variables
+
+- `JWT_SECRET`: Secret key for JWT token generation (required if using authentication)
+- `JWT_EXPIRES_IN`: JWT token expiration time (default: 24h)
+- `LOG_LEVEL`: Logging level (debug/info/warn/error)
+- `RATE_LIMIT_WINDOW_MS`: Rate limiting window in milliseconds (default: 900000)
+- `RATE_LIMIT_MAX_REQUESTS`: Maximum requests per window (default: 100)
+
+### Setting Up Environment Variables
+
+1. For Frontend:
+
+   ```bash
+   cd frontend
+   cp .env.example .env
+   ```
+
+   Edit the `.env` file and configure:
+
+   - Set the correct API URL for your environment
+   - Configure feature flags as needed
+   - Set up authentication variables if required
+
+2. For Backend:
+
+   ```bash
+   cd backend
+   cp .env.example .env
+   ```
+
+   Edit the `.env` file and replace the placeholders with your actual values:
+
+   - Replace `<username>`, `<password>`, `<cluster>`, and `<appName>` in MONGODB_URI with your MongoDB Atlas credentials
+   - Set a secure JWT_SECRET if using authentication
+   - Adjust other optional variables as needed
+
+3. Important Notes:
+   - Never commit your actual `.env` files to version control
+   - Keep your credentials and secrets secure
+   - Use different environment variables for development and production
+   - For production deployment, ensure all sensitive values are properly set and secure
 
 ## Monitoring and Maintenance
 
