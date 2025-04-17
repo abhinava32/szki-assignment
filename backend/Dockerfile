@@ -1,7 +1,7 @@
 # Build stage
 FROM node:18-alpine as builder
 
-WORKDIR /app
+WORKDIR /backend
 
 # Copy package files
 COPY package*.json ./
@@ -18,7 +18,7 @@ RUN npm run build
 # Production stage
 FROM node:18-alpine
 
-WORKDIR /app
+WORKDIR /backend
 
 # Copy package files
 COPY package*.json ./
@@ -27,11 +27,10 @@ COPY package*.json ./
 RUN npm install --production
 
 # Copy built files from builder stage
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/.env ./
+COPY --from=builder /backend/dist ./dist
 
 # Expose the port
-EXPOSE 3001
+EXPOSE 4000
 
 # Start the application
 CMD ["npm", "start"] 

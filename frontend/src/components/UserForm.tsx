@@ -1,4 +1,4 @@
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { UserFormData } from "@/types/user";
@@ -74,7 +74,7 @@ export default function UserForm({
           type="text"
           id="user"
           {...register("user")}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2"
         />
         {errors.user && (
           <p className="mt-1 text-sm text-red-600">{errors.user.message}</p>
@@ -92,7 +92,7 @@ export default function UserForm({
           type="email"
           id="email"
           {...register("email")}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2"
         />
         {errors.email && (
           <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
@@ -110,7 +110,7 @@ export default function UserForm({
           type="number"
           id="mobile"
           {...register("mobile", { valueAsNumber: true })}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2"
         />
         {errors.mobile && (
           <p className="mt-1 text-sm text-red-600">{errors.mobile.message}</p>
@@ -128,7 +128,7 @@ export default function UserForm({
           type="text"
           id="interest"
           {...register("interest")}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2"
           placeholder="Enter interests separated by commas"
         />
         {errors.interest && (
@@ -146,7 +146,7 @@ export default function UserForm({
           type="number"
           id="age"
           {...register("age", { valueAsNumber: true })}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2"
         />
         {errors.age && (
           <p className="mt-1 text-sm text-red-600">{errors.age.message}</p>

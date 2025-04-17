@@ -4,9 +4,10 @@ metadata:
   name: backend-service
 spec:
   type: ClusterIP
+  ports:
+    - port: 3001
+      targetPort: 3001
+      protocol: TCP
+      name: http
   selector:
     app: backend
-  ports:
-    - protocol: TCP
-      port: 3001
-      targetPort: 3001

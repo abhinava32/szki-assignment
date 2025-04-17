@@ -13,9 +13,12 @@ out/
 # Production
 build/
 dist/
+backend/dist/
+frontend/dist/
 
 # Docker
 .docker/
+docker/k8s/backend-secrets.yaml
 
 # Environment variables
 .env

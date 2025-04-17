@@ -1,64 +1,156 @@
-# Project Structure
+# User Management System
 
-This project is organized into three main directories:
+A scalable microservices application with a Next.js frontend and Express.js backend, containerized with Docker and orchestrated using Docker Compose or Kubernetes.
 
-## Frontend
+## Features
 
-The frontend directory contains the client-side application code built with Next.js.
+- User management (CRUD operations)
+- Scalable architecture with load balancing
+- Containerized deployment
+- Single entry point through Nginx
+- Kubernetes deployment support
 
-## Backend
+## Prerequisites
 
-The backend directory contains the server-side application code built with Express.js and TypeScript.
-
-## Docker
-
-The docker directory contains Docker-related configuration files and Kubernetes deployment manifests.
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js v18 or higher
 - Docker v24 or higher
-- Kubernetes (Minikube) v1.28 or higher
-- kubectl v1.28 or higher
+- Docker Compose v2 or higher
+- Node.js v18 or higher (for local development)
+- MongoDB (for local development)
+- Kubernetes (Minikube) v1.28 or higher (for Kubernetes deployment)
+- kubectl v1.28 or higher (for Kubernetes deployment)
+
+## Environment Setup
 
 ### Local Development
 
-1. Clone the repository
-2. Install dependencies:
+1. Frontend Environment:
 
    ```bash
-   # Frontend
+   cd frontend
+   cp .env.example .env
+   ```
+
+   Configure the following variables in `.env`:
+
+   - `NEXT_PUBLIC_API_URL`: Backend API URL (http://localhost:4000/api for local)
+   - `NEXT_PUBLIC_APP_NAME`: Application name
+   - `NEXT_PUBLIC_APP_ENV`: Environment (development/production)
+   - `NEXT_PUBLIC_ENABLE_ANALYTICS`: Enable analytics (true/false)
+   - `NEXT_PUBLIC_ENABLE_ERROR_REPORTING`: Enable error reporting (true/false)
+   - `NEXT_PUBLIC_AUTH_ENABLED`: Enable authentication (true/false)
+   - `NEXT_PUBLIC_AUTH0_DOMAIN`: Auth0 domain (if auth enabled)
+   - `NEXT_PUBLIC_AUTH0_CLIENT_ID`: Auth0 client ID (if auth enabled)
+
+2. Backend Environment:
+   ```bash
+   cd backend
+   cp .env.example .env
+   ```
+   Configure the following variables in `.env`:
+   - `PORT`: Server port (4000)
+   - `NODE_ENV`: Environment (development/production)
+   - `MONGODB_URI`: MongoDB connection string
+   - `JWT_SECRET`: Secret for JWT token generation
+   - `JWT_EXPIRES_IN`: JWT token expiration time
+   - `LOG_LEVEL`: Logging level (debug/info/warn/error)
+   - `RATE_LIMIT_WINDOW_MS`: Rate limiting window
+   - `RATE_LIMIT_MAX_REQUESTS`: Maximum requests per window
+
+### Docker Development
+
+1. Frontend Environment:
+
+   ```bash
+   cd frontend
+   cp .env.example .env
+   ```
+
+   Set `NEXT_PUBLIC_API_URL=http://backend:4000/api`
+
+2. Backend Environment:
+   ```bash
+   cd backend
+   cp .env.example .env
+   ```
+   Set `MONGODB_URI=mongodb://mongodb:27017/your-database`
+
+## Quick Start
+
+### Local Development
+
+1. Start MongoDB:
+
+   ```bash
+   mongod
+   ```
+
+2. Start Backend:
+
+   ```bash
+   cd backend
+   npm install
+   npm run dev
+   ```
+
+3. Start Frontend:
+
+   ```bash
    cd frontend
    npm install
-
-   # Backend
-   cd ../backend
-   npm install
-   ```
-
-3. Start the development servers:
-
-   ```bash
-   # Frontend (in frontend directory)
-   npm run dev
-
-   # Backend (in backend directory)
    npm run dev
    ```
 
-### Docker Deployment
-
-1. Build and run using Docker Compose:
-
-   ```bash
-   docker-compose up --build
-   ```
-
-2. Access the services:
+4. Access the application:
    - Frontend: http://localhost:3000
-   - Backend: http://localhost:3001
+   - Backend API: http://localhost:4000/api
+
+### Docker Development
+
+1. Clone the repository
+2. Start the services:
+   ```bash
+   docker-compose up -d --build
+   ```
+3. Access the application:
+   - Frontend: http://localhost
+   - API: http://localhost/api
+
+## Scaling Services
+
+Scale frontend and backend services:
+
+```bash
+# Scale to 5 frontend and 3 backend instances
+docker-compose up -d --scale frontend=5 --scale backend=3
+
+# Check running instances
+docker-compose ps
+
+# View logs
+docker-compose logs -f
+```
+
+## Architecture
+
+- **Frontend**: Next.js application
+- **Backend**: Express.js API
+- **Nginx**: Reverse proxy and load balancer
+- **Docker Network**: Internal communication between services
+
+## Production Deployment
+
+### Docker Compose Deployment
+
+1. Build and start:
+
+   ```bash
+   docker-compose up -d --build
+   ```
+
+2. Scale services as needed:
+   ```bash
+   docker-compose up -d --scale frontend=5 --scale backend=3
+   ```
 
 ### Kubernetes Deployment
 
@@ -83,6 +175,7 @@ The docker directory contains Docker-related configuration files and Kubernetes 
 3. Deploy to Kubernetes:
 
    ```bash
+   # Apply Kubernetes configurations
    kubectl apply -f docker/k8s/frontend-deployment.yaml
    kubectl apply -f docker/k8s/frontend-service.yaml
    kubectl apply -f docker/k8s/backend-deployment.yaml
@@ -91,137 +184,114 @@ The docker directory contains Docker-related configuration files and Kubernetes 
 
 4. Access the services:
    ```bash
-   minikube service frontend-service
+   # Get the frontend service URL
+   minikube service frontend-service --url
    ```
 
-## Project Architecture
+## Monitoring
 
-### Frontend
+### Docker Compose Monitoring
 
-- Next.js application
-- TypeScript support
-- Tailwind CSS for styling
-- Dockerized for production
-- Kubernetes deployment with 3 replicas
-- Health checks and resource limits configured
-
-### Backend
-
-- Express.js server
-- TypeScript support
-- RESTful API
-- Dockerized for production
-- Kubernetes deployment with 3 replicas
-- Health checks and resource limits configured
-
-### Kubernetes Configuration
-
-- Frontend Service: NodePort (port 30000)
-- Backend Service: ClusterIP (internal only)
-- Health checks for both services
-- Resource limits and requests configured
-- Multiple replicas for high availability
-
-## Environment Variables
-
-### Frontend Configuration
-
-#### Required Variables
-
-- `NEXT_PUBLIC_API_URL`: Backend API URL (default: http://localhost:3001/api)
-- `NEXT_PUBLIC_APP_NAME`: Application name (default: "User Management System")
-- `NEXT_PUBLIC_APP_ENV`: Application environment (development/production)
-
-#### Optional Variables
-
-- `NEXT_PUBLIC_ENABLE_ANALYTICS`: Enable analytics tracking (default: false)
-- `NEXT_PUBLIC_ENABLE_ERROR_REPORTING`: Enable error reporting (default: false)
-- `NEXT_PUBLIC_AUTH_ENABLED`: Enable authentication (default: false)
-- `NEXT_PUBLIC_AUTH0_DOMAIN`: Auth0 domain (required if auth enabled)
-- `NEXT_PUBLIC_AUTH0_CLIENT_ID`: Auth0 client ID (required if auth enabled)
-
-### Backend Configuration
-
-#### Required Variables
-
-- `PORT`: Server port (default: 3001)
-- `NODE_ENV`: Environment (development/production)
-- `MONGODB_URI`: MongoDB Atlas connection string (format: mongodb+srv://<username>:<password>@<cluster>.mongodb.net/?retryWrites=true&w=majority&appName=<appName>)
-
-#### Optional Variables
-
-- `JWT_SECRET`: Secret key for JWT token generation (required if using authentication)
-- `JWT_EXPIRES_IN`: JWT token expiration time (default: 24h)
-- `LOG_LEVEL`: Logging level (debug/info/warn/error)
-- `RATE_LIMIT_WINDOW_MS`: Rate limiting window in milliseconds (default: 900000)
-- `RATE_LIMIT_MAX_REQUESTS`: Maximum requests per window (default: 100)
-
-### Setting Up Environment Variables
-
-1. For Frontend:
-
-   ```bash
-   cd frontend
-   cp .env.example .env
-   ```
-
-   Edit the `.env` file and configure:
-
-   - Set the correct API URL for your environment
-   - Configure feature flags as needed
-   - Set up authentication variables if required
-
-2. For Backend:
-
-   ```bash
-   cd backend
-   cp .env.example .env
-   ```
-
-   Edit the `.env` file and replace the placeholders with your actual values:
-
-   - Replace `<username>`, `<password>`, `<cluster>`, and `<appName>` in MONGODB_URI with your MongoDB Atlas credentials
-   - Set a secure JWT_SECRET if using authentication
-   - Adjust other optional variables as needed
-
-3. Important Notes:
-   - Never commit your actual `.env` files to version control
-   - Keep your credentials and secrets secure
-   - Use different environment variables for development and production
-   - For production deployment, ensure all sensitive values are properly set and secure
-
-## Monitoring and Maintenance
-
-To check the status of your Kubernetes deployments:
+Check service status:
 
 ```bash
-kubectl get deployments
-kubectl get pods
-kubectl get services
+# View running containers
+docker-compose ps
+
+# View logs
+docker-compose logs -f
+
+# View nginx logs
+docker-compose logs nginx
 ```
 
-To view logs:
+### Kubernetes Monitoring
 
 ```bash
+# Check deployments
+kubectl get deployments
+
+# Check pods
+kubectl get pods
+
+# Check services
+kubectl get services
+
+# View logs
 kubectl logs -f deployment/frontend-deployment
 kubectl logs -f deployment/backend-deployment
 ```
 
 ## Troubleshooting
 
+### Docker Compose Issues
+
+1. If services don't start:
+
+   ```bash
+   docker-compose down
+   docker-compose build --no-cache
+   docker-compose up -d
+   ```
+
+2. Check nginx configuration:
+   ```bash
+   docker-compose exec nginx nginx -t
+   ```
+
+### Kubernetes Issues
+
 1. If services are not accessible:
 
-   - Check pod status: `kubectl get pods`
-   - View pod logs: `kubectl logs <pod-name>`
-   - Check service status: `kubectl get services`
+   ```bash
+   # Check pod status
+   kubectl get pods
 
-2. If Docker builds fail:
+   # View pod logs
+   kubectl logs <pod-name>
 
-   - Ensure Docker daemon is running
-   - Check for sufficient disk space
-   - Verify network connectivity
+   # Check service status
+   kubectl get services
+   ```
 
-3. If Kubernetes deployments fail:
-   - Check Minikube status: `minikube status`
-   - Verify image loading: `minikube image ls`
-   - Check resource availability: `kubectl describe nodes`
+2. If deployments fail:
+
+   ```bash
+   # Check Minikube status
+   minikube status
+
+   # Verify image loading
+   minikube image ls
+
+   # Check resource availability
+   kubectl describe nodes
+   ```
+
+## Cleanup
+
+### Docker Compose Cleanup
+
+```bash
+# Stop services and remove volumes
+docker-compose down -v
+
+# Remove all containers, networks, and volumes
+docker system prune -a --volumes
+```
+
+### Kubernetes Cleanup
+
+```bash
+# Delete deployments
+kubectl delete -f docker/k8s/
+
+# Delete secrets
+kubectl delete secret backend-secrets
+
+# Stop Minikube
+minikube stop
+```
+
+## License
+
+MIT

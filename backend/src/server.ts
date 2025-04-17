@@ -24,14 +24,7 @@ app.get("/", (req, res) => {
 });
 
 // User routes
-app.use(
-  "/api",
-  (req, res, next) => {
-    console.log("called api");
-    next();
-  },
-  userRoutes
-);
+app.use("/api", userRoutes);
 
 // Start server
 app.listen(port, () => {
