@@ -305,7 +305,3 @@ kubectl delete secret backend-secrets
 # Stop Minikube
 minikube stop
 ```
-
-## License
-
-MIT
