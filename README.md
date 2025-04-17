@@ -21,70 +21,84 @@ A scalable microservices application with a Next.js frontend and Express.js back
 
 ## Environment Setup
 
-### Local Development
+### Required Environment Variables
 
-1. Frontend Environment:
+#### Frontend (.env)
+
+```bash
+# API Configuration (Required)
+NEXT_PUBLIC_API_URL=http://localhost:4000/api  # Local development
+# NEXT_PUBLIC_API_URL=http://backend:4000/api  # Docker development
+
+# Application Configuration (Required)
+NEXT_PUBLIC_APP_NAME="User Management System"
+NEXT_PUBLIC_APP_ENV=development
+```
+
+#### Backend (.env)
+
+```bash
+# Server Configuration (Required)
+PORT=4000
+NODE_ENV=development
+
+# Database Configuration (Required)
+MONGODB_URI=mongodb://localhost:27017/your-database  # Local development
+# MONGODB_URI=mongodb://mongodb:27017/your-database  # Docker development
+```
+
+### Optional Environment Variables
+
+#### Frontend (.env)
+
+```bash
+# Feature Flags (Optional)
+NEXT_PUBLIC_ENABLE_ANALYTICS=false
+NEXT_PUBLIC_ENABLE_ERROR_REPORTING=false
+
+# Authentication (Optional)
+NEXT_PUBLIC_AUTH_ENABLED=false
+NEXT_PUBLIC_AUTH0_DOMAIN=your-auth0-domain
+NEXT_PUBLIC_AUTH0_CLIENT_ID=your-auth0-client-id
+```
+
+#### Backend (.env)
+
+```bash
+# Security (Optional)
+JWT_SECRET=your-jwt-secret
+JWT_EXPIRES_IN=24h
+
+# Logging (Optional)
+LOG_LEVEL=info
+
+# Rate Limiting (Optional)
+RATE_LIMIT_WINDOW_MS=900000
+RATE_LIMIT_MAX_REQUESTS=100
+```
+
+### Setup Instructions
+
+1. Frontend Setup:
 
    ```bash
    cd frontend
    cp .env.example .env
+   # Edit .env with your configuration
    ```
 
-   Configure the following variables in `.env`:
-
-   - `NEXT_PUBLIC_API_URL`: Backend API URL (http://localhost:4000/api for local)
-   - `NEXT_PUBLIC_APP_NAME`: Application name
-   - `NEXT_PUBLIC_APP_ENV`: Environment (development/production)
-   - `NEXT_PUBLIC_ENABLE_ANALYTICS`: Enable analytics (true/false)
-   - `NEXT_PUBLIC_ENABLE_ERROR_REPORTING`: Enable error reporting (true/false)
-   - `NEXT_PUBLIC_AUTH_ENABLED`: Enable authentication (true/false)
-   - `NEXT_PUBLIC_AUTH0_DOMAIN`: Auth0 domain (if auth enabled)
-   - `NEXT_PUBLIC_AUTH0_CLIENT_ID`: Auth0 client ID (if auth enabled)
-
-2. Backend Environment:
+2. Backend Setup:
    ```bash
    cd backend
    cp .env.example .env
+   # Edit .env with your configuration
    ```
-   Configure the following variables in `.env`:
-   - `PORT`: Server port (4000)
-   - `NODE_ENV`: Environment (development/production)
-   - `MONGODB_URI`: MongoDB connection string
-   - `JWT_SECRET`: Secret for JWT token generation
-   - `JWT_EXPIRES_IN`: JWT token expiration time
-   - `LOG_LEVEL`: Logging level (debug/info/warn/error)
-   - `RATE_LIMIT_WINDOW_MS`: Rate limiting window
-   - `RATE_LIMIT_MAX_REQUESTS`: Maximum requests per window
-
-### Docker Development
-
-1. Frontend Environment:
-
-   ```bash
-   cd frontend
-   cp .env.example .env
-   ```
-
-   Set `NEXT_PUBLIC_API_URL=http://backend:4000/api`
-
-2. Backend Environment:
-   ```bash
-   cd backend
-   cp .env.example .env
-   ```
-   Set `MONGODB_URI=mongodb://mongodb:27017/your-database`
 
 ## Quick Start
 
 ### Local Development
 
-1. Start MongoDB:
-
-   ```bash
-   mongod
-   ```
-
-2. Start Backend:
+1. Start Backend:
 
    ```bash
    cd backend
@@ -92,7 +106,7 @@ A scalable microservices application with a Next.js frontend and Express.js back
    npm run dev
    ```
 
-3. Start Frontend:
+2. Start Frontend:
 
    ```bash
    cd frontend
@@ -100,7 +114,7 @@ A scalable microservices application with a Next.js frontend and Express.js back
    npm run dev
    ```
 
-4. Access the application:
+3. Access the application:
    - Frontend: http://localhost:3000
    - Backend API: http://localhost:4000/api
 
